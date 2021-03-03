@@ -5,6 +5,8 @@ import Search from './Search'
 import TitleBar from './TitleBar'
 import Products from './Products'
 
+import styled, { css } from 'styled-components'
+
 const App = (props) => {
 	var title = 'React 쇼핑몰'
 	const [query, setQuery] = useState('')
@@ -29,7 +31,7 @@ const App = (props) => {
 
 	return (
 		<div className="container">
-			<TitleBar query={query} title={title} className="my-4" />
+			<TitleBar query={query} title={title} />
 			<Search onChange={commitChange} />
 			<Products products={resultProducts} />
 		</div>
