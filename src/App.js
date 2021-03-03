@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import axios from 'axios'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Search from './Search'
+import TitleBar from './TitleBar'
+import Products from './Products'
+
+const App = (props) => {
+	var title = 'React 쇼핑몰'
+	const [query, setQuery] = useState('')
+	const [products, setProducts] = useState([])
+	const [resultProducts, setResultProducts] = useState([])
+
+	useEffect(async () => {
+		try {
+			var { data } = await axios.get('../json/products.json')
+			setProducts(data)
+			setResultProducts(data)
+		}
+		catch(e) {
+			console.log(e)
+		}
+	}, [])
+
+	const commitChange = value => {
+		setQuery(value)
+		setResultProducts(products.filter(v => v.title.includes(value)))
+	}
+
+	return (
+		<div className="container">
+			<TitleBar query={query} title={title} className="my-4" />
+			<Search onChange={commitChange} />
+			<Products products={resultProducts} />
+		</div>
+	)
 }
 
 export default App;
